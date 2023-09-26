@@ -3739,6 +3739,14 @@ void print_full_bw_report (struct perftest_parameters *user_param, struct bw_rep
 	double msgRate_avg_p2 = my_bw_rep->msgRate_avg_p2;
 	int inc_accuracy = ((bw_avg < 0.1) && (user_param->report_fmt == GBS));
 
+	      time_t t;
+      struct tm *tm_info;
+      char ts[26]={0};
+
+      time(&t);
+      tm_info = localtime(&t);
+      strftime(ts, 26, "%Y-%m-%d-%H-%M-%S", tm_info);
+
 	if (rem_bw_rep != NULL) {
 		bw_peak     += rem_bw_rep->bw_peak;
 		bw_avg      += rem_bw_rep->bw_avg;
@@ -3783,7 +3791,7 @@ void print_full_bw_report (struct perftest_parameters *user_param, struct bw_rep
 	else if (user_param->report_per_port)
 		printf(REPORT_FMT_PER_PORT, my_bw_rep->size, my_bw_rep->iters, bw_peak, bw_avg, msgRate_avg, bw_avg_p1, msgRate_avg_p1, bw_avg_p2, msgRate_avg_p2);
 	else
-		printf( inc_accuracy ? REPORT_FMT_EXT : REPORT_FMT, my_bw_rep->size, my_bw_rep->iters, bw_peak, bw_avg, msgRate_avg);
+		printf( inc_accuracy ? REPORT_FMT_EXT : REPORT_FMT, my_bw_rep->size, my_bw_rep->iters, bw_peak, bw_avg, msgRate_avg, ts);
 	if (user_param->output == FULL_VERBOSITY) {
 		fflush(stdout);
 		fprintf(stdout, user_param->cpu_util_data.enable ? REPORT_EXT_CPU_UTIL : REPORT_EXT , calc_cpu_util(user_param));
